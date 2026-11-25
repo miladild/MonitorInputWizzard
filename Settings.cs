@@ -32,8 +32,13 @@ public sealed class InputPreset : INotifyPropertyChanged
 
     [JsonIgnore]
     public string HotkeyText => HasHotkey
-        ? (_modifiers == ModifierKeys.None ? "" : _modifiers.ToString().Replace(", ", "+") + "+") + _key
+        ? FormatModifiers(_modifiers) + _key
         : "(none)";
+
+    /// <summary>"Ctrl+Alt+Shift+Win+" prefix in the order people write it (WPF's own ToString gives Alt+Control+...).</summary>
+    public static string FormatModifiers(ModifierKeys m) =>
+        ((m & ModifierKeys.Control) != 0 ? "Ctrl+" : "") + ((m & ModifierKeys.Alt) != 0 ? "Alt+" : "") +
+        ((m & ModifierKeys.Shift) != 0 ? "Shift+" : "") + ((m & ModifierKeys.Windows) != 0 ? "Win+" : "");
 
     private static bool TryParseHex(string s, out uint value)
     {

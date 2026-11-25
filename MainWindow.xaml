@@ -1,7 +1,7 @@
 <Window x:Class="MonitorInputWizzard.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Monitor Input Wizzard" Height="360" Width="560"
+        Title="Monitor Input Wizzard" Height="520" Width="680"
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
     <DockPanel Margin="12">
         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,8">
@@ -10,10 +10,10 @@
                           Checked="NvMode_Changed" Unchecked="NvMode_Changed"
                           ToolTip="Switch via NVAPI raw I2C (LG 0x50 sidechannel). Broadcasts to all displays; the monitor picker below is unused. Requires NVIDIA GPU."/>
                 <TextBlock Text="Src:" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <TextBox x:Name="SrcBox" Width="46" VerticalAlignment="Center" Margin="0,0,16,0"
+                <TextBox x:Name="SrcBox" Width="64" VerticalAlignment="Center" Margin="0,0,16,0"
                          ToolTip="DDC/CI source address. LG sidechannel = 0x50; standard = 0x51."/>
                 <TextBlock Text="Input VCP:" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <TextBox x:Name="InputRegBox" Width="46" VerticalAlignment="Center" HorizontalAlignment="Left"
+                <TextBox x:Name="InputRegBox" Width="64" VerticalAlignment="Center" HorizontalAlignment="Left"
                          ToolTip="Register carrying input source. 0x60 = standard; LG UltraGear = 0xF4."/>
             </DockPanel>
             <DockPanel x:Name="MonitorRow"
@@ -27,6 +27,9 @@
                 <ComboBox x:Name="MonitorBox" DisplayMemberPath="Description"
                           SelectionChanged="Monitor_Changed"/>
             </DockPanel>
+            <CheckBox x:Name="AutostartCheck" Content="Start with Windows (minimized to tray)" Margin="0,8,0,0"
+                      Click="Autostart_Click"
+                      ToolTip="Adds a per-user startup entry (no admin). Closing the window keeps the app running in the tray."/>
         </StackPanel>
 
         <DockPanel DockPanel.Dock="Bottom" Margin="0,8,0,0">
@@ -37,32 +40,32 @@
             </StackPanel>
         </DockPanel>
 
-        <ListView x:Name="InputList" BorderThickness="0">
+        <ListView x:Name="InputList" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" Width="150">
+                    <GridViewColumn Header="Name" Width="190">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Width="140"/>
+                                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Width="170"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="VCP code" Width="70">
+                    <GridViewColumn Header="VCP code" Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding CodeHex, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Width="60"/>
+                                <TextBox Text="{Binding CodeHex, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Width="80"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Hotkey" Width="150">
+                    <GridViewColumn Header="Hotkey" Width="220">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="{Binding HotkeyText}" Width="140" Padding="4,2"
+                                <Button Content="{Binding HotkeyText}" Width="200" Padding="4,2"
                                         Click="Hotkey_Click" ToolTip="Click, then press a key combo. Esc clears."/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="" Width="120">
+                    <GridViewColumn Header="" Width="130">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

@@ -6,15 +6,31 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms> <!-- framework NotifyIcon for the tray; no NuGet -->
     <RootNamespace>MonitorInputWizzard</RootNamespace>
+    <NoWarn>$(NoWarn);WPF0001</NoWarn> <!-- Fluent ThemeMode is experimental -->
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages> <!-- drop ~18 MB of unused localized WPF resources -->
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="app.ico" LogicalName="app.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- WPF + WinForms implicit usings collide (Application, Button, KeyEventArgs...) -->
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+  </ItemGroup>
 
   <PropertyGroup>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <!-- Compression keeps every decompressed assembly in private memory: ~144 MB -> ~52 MB private working set
+         when idle in the tray, at the cost of a larger exe on disk. -->
+    <EnableCompressionInSingleFile>false</EnableCompressionInSingleFile>
   </PropertyGroup>
 
 </Project>
